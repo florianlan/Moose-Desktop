@@ -1,5 +1,9 @@
 package data;
 
+import tools.TrialInfo.INFO;
+
+import java.io.IOException;
+
 public class Data {
     private int rows;
     private int cols;
@@ -47,14 +51,35 @@ public class Data {
         actualX = (int) (upX / fieldX) + 1;
         actualY = (int) (upY / fieldY) + 1;
 
+        // Writing result into CSV file
         if (actualX == expectedX && actualY == expectedY) {
+            try {
+                String str = INFO.PARTICIPANT_ID + "," + INFO.TRIAL_NR + "," + INFO.TASK_ID + "," + INFO.BLOCK_NR + "," +
+                        rows + "," + cols + "," + "2" + "," + "false" + "," + actualY + "," + actualX + "," + expectedY + "," +
+                        expectedX + "," + "true" + "," + downX + "," + downY + "," + upX + "," + upY + "," +
+                        "0,0,0,0,0,0;\n";
+                Writer.getInstance().write(str);
+                Writer.getInstance().flush();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
             System.out.println("click success");
             return true;
         }
 
+        try {
+            String str = INFO.PARTICIPANT_ID + "," + INFO.TRIAL_NR + "," + INFO.TASK_ID + "," + INFO.BLOCK_NR + "," +
+                    rows + "," + cols + "," + "2" + "," + "false" + "," + actualY + "," + actualX + "," + expectedY + "," +
+                    expectedX + "," + "false" + "," + downX + "," + downY + "," + upX + "," + upY + "," +
+                    "0,0,0,0,0,0;\n";
+            Writer.getInstance().write(str);
+            Writer.getInstance().flush();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
         System.out.println("no success");
-        System.out.println(expectedX + ";" + actualX);
-        System.out.println(expectedY + ";" + actualY);
         return false;
     }
 
