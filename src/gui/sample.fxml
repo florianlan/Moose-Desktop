@@ -6,11 +6,10 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.shape.Line?>
 
-
-<AnchorPane fx:id="test_area" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.Controller">
+<AnchorPane fx:id="test_area" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.Controller">
    <children>
       <Label layoutX="21.0" layoutY="14.0" prefHeight="33.0" prefWidth="392.0" text="Click with your Moose in the box below with the button it shows you:" textAlignment="CENTER" />
-      <Pane id="click_field" fx:id="click_field" layoutX="160.0" layoutY="100.0" onMouseClicked="#btnClicked" prefHeight="100.0" prefWidth="100.0" style="-fx-background-color: #cccccc; -fx-border-color: #000000;">
+      <Pane id="click_field" fx:id="click_field" layoutX="160.0" layoutY="100.0" onMouseClicked="#btnClicked" onMouseEntered="#btnHover" onMouseExited="#btnHoverExit" prefHeight="100.0" prefWidth="100.0" style="-fx-background-color: #cccccc; -fx-border-color: #000000;">
          <opaqueInsets>
             <Insets />
          </opaqueInsets>
