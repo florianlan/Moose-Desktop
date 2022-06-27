@@ -5,6 +5,7 @@ package control;
 
 import data.Data;
 import gui.Controller;
+import javafx.application.Platform;
 import tools.Consts.STRINGS;
 import tools.Logs;
 import tools.Memo;
@@ -95,7 +96,9 @@ public class Server {
                             //first INTRO message after connecting
 
                         } else if (memo.getAction().equals(STRINGS.SCROLL) && memo.getMode().equals(STRINGS.DRAG)) {
-                            if (Controller.getInstance().isHovered()) {
+                            // if (Controller.getInstance().isHovered())
+                            if (true) { //TODO: implement correct in thread safe mode
+                                System.out.println("click and hovered");
                                 // New click on GRID
                                 String[] down = memo.getStrValue(1).split(",");
                                 String[] up = memo.getStrValue(2).split(",");
@@ -105,8 +108,11 @@ public class Server {
                                 Data.getInstance().setUpY(Integer.parseInt(up[1]));
 
                                 // If moose click on square
+                                Controller ctr = Controller.getInstance();
                                 if (Data.getInstance().checkMooseClick()) {
-                                    Controller.getInstance().success();
+                                    Platform.runLater(ctr::success);
+                                } else {
+                                    Platform.runLater(ctr::noSuccess);
                                 }
                             }
 

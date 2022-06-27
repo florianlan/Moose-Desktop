@@ -8,7 +8,6 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
 
 public class Main extends Application {
@@ -34,4 +33,10 @@ public class Main extends Application {
 
     }
 
+    @Override
+    public void stop() throws Exception {
+        super.stop();
+        Writer.getInstance().close();
+
+    }
 }
