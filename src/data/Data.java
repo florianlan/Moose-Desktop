@@ -17,8 +17,10 @@ public class Data {
     //for success check
     private int expectedX;
     private int expectedY;
-    private int actualX;
-    private int actualY;
+
+    //for time measurement
+    private long startMilliSec;
+    private long endMilliSec;
 
     private static Data INSTANCE;
 
@@ -45,19 +47,31 @@ public class Data {
             return false;
         }
 
+        //field size per grid element
         double fieldX = (sizeX + 0.0) / cols;
         double fieldY = (sizeY + 0.0) / rows;
 
-        actualX = (int) (upX / fieldX) + 1;
-        actualY = (int) (upY / fieldY) + 1;
+        //coordinates of grid starting from 1
+        int actualX = (int) (upX / fieldX) + 1;
+        int actualY = (int) (upY / fieldY) + 1;
+
+        //pixel offset and euclid
+        int expectedXPixel = (int) (expectedX * fieldX - fieldX/2);
+        int expectedYPixel = (int) (expectedY * fieldY - fieldY/2);
+        int pixOffX = upX - expectedXPixel;
+        int pixOffY = upY - expectedYPixel;
+        double euclidDistance = Math.sqrt(Math.pow(pixOffY, 2) + Math.pow(pixOffX, 2));
+
+        //duration from hover to click
+        int duration = (int) (endMilliSec - startMilliSec);
 
         // Writing result into CSV file
         if (actualX == expectedX && actualY == expectedY) {
             try {
                 String str = INFO.PARTICIPANT_ID + "," + INFO.TRIAL_NR + "," + INFO.TASK_ID + "," + INFO.BLOCK_NR + "," +
-                        rows + "," + cols + "," + "2" + "," + "false" + "," + actualY + "," + actualX + "," + expectedY + "," +
-                        expectedX + "," + "true" + "," + downX + "," + downY + "," + upX + "," + upY + "," +
-                        "0,0,0,0,0,0;\n";
+                        rows + "," + cols + "," + INFO.SYMBOLS + "," + INFO.SYMBOLS + "," + actualY + "," + actualX + "," + expectedY + "," +
+                        expectedX + "," + "true" + "," + duration + "," + downX + "," + downY + "," + upX + "," + upY + "," +
+                        "0,0,0," + pixOffY + "," + pixOffX + "," + euclidDistance + "," + sizeX + "," + sizeY + "," + fieldX + "," + fieldY + "\n";
                 Writer.getInstance().write(str);
                 Writer.getInstance().flush();
             } catch (IOException e) {
@@ -68,11 +82,15 @@ public class Data {
             return true;
         }
 
+        int manhattanOffRow = Math.abs(actualY - expectedY);
+        int manhattanOffCol = Math.abs(actualX - expectedX);
+        int manhattanDistance = manhattanOffCol + manhattanOffCol;
+
         try {
             String str = INFO.PARTICIPANT_ID + "," + INFO.TRIAL_NR + "," + INFO.TASK_ID + "," + INFO.BLOCK_NR + "," +
-                    rows + "," + cols + "," + "2" + "," + "false" + "," + actualY + "," + actualX + "," + expectedY + "," +
-                    expectedX + "," + "false" + "," + downX + "," + downY + "," + upX + "," + upY + "," +
-                    "0,0,0,0,0,0;\n";
+                    rows + "," + cols + "," + INFO.SYMBOLS + "," + INFO.SYMBOLS + "," + actualY + "," + actualX + "," + expectedY + "," +
+                    expectedX + "," + "false" + "," + duration + "," + downX + "," + downY + "," + upX + "," + upY + "," +
+                    manhattanDistance + "," + manhattanOffRow + "," + manhattanOffCol + "," + pixOffY + "," + pixOffX + "," + euclidDistance + "," + sizeX + "," + sizeY + "," + fieldX + "," + fieldY + "\n";
             Writer.getInstance().write(str);
             Writer.getInstance().flush();
         } catch (IOException e) {
@@ -127,6 +145,14 @@ public class Data {
         this.expectedY = expectedY;
     }
 
+    public void setStartMilliSec(long startMilliSec) {
+        this.startMilliSec = startMilliSec;
+    }
+
+    public void setEndMilliSec(long endMilliSec) {
+        this.endMilliSec = endMilliSec;
+    }
+
     /**
      * Getter
      */
@@ -162,4 +188,11 @@ public class Data {
         return upY;
     }
 
+    public long getStartMilliSec() {
+        return startMilliSec;
+    }
+
+    public long getEndMilliSec() {
+        return endMilliSec;
+    }
 }

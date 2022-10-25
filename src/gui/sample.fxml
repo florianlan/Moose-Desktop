@@ -9,7 +9,7 @@
 
 <AnchorPane fx:id="test_area" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.Controller">
    <children>
-      <Label fx:id="lbl_info" layoutX="21.0" layoutY="14.0" prefHeight="33.0" prefWidth="248.0" text="Trial X/Y" textAlignment="CENTER" visible="false" />
+      <Label fx:id="lbl_info" layoutX="21.0" layoutY="14.0" prefHeight="33.0" prefWidth="562.0" text="Trial X/Y" textAlignment="CENTER" visible="false" />
       <Pane id="click_field" fx:id="click_field" disable="true" layoutX="117.0" layoutY="91.0" onMouseClicked="#btnClicked" onMouseEntered="#btnHover" onMouseExited="#btnHoverExit" prefHeight="100.0" prefWidth="100.0" style="-fx-background-color: #cccccc; -fx-border-color: #000000;" visible="false">
          <opaqueInsets>
             <Insets />
@@ -19,6 +19,7 @@
             <Line id="hori_line" fx:id="hori_line" endX="60.0" endY="30.0" layoutX="20.0" layoutY="20.0" startY="30.0" strokeWidth="4.0" />
          </children>
       </Pane>
-      <Button fx:id="click_start" layoutX="233.0" layoutY="176.0" mnemonicParsing="false" onMouseClicked="#btnStartClick" prefHeight="48.0" prefWidth="135.0" text="Start" />
+      <Button fx:id="click_start" alignment="CENTER" contentDisplay="CENTER" layoutX="233.0" layoutY="176.0" mnemonicParsing="false" onMouseClicked="#btnStartClick" prefHeight="48.0" prefWidth="135.0" text="Start" />
+      <Button fx:id="click_continue" alignment="CENTER" contentDisplay="CENTER" layoutX="233.0" layoutY="176.0" mnemonicParsing="false" onMouseClicked="#btnContinueClick" prefHeight="48.0" prefWidth="135.0" text="Continue" visible="false" />
    </children>
 </AnchorPane>

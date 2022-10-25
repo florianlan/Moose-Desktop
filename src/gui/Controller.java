@@ -15,11 +15,13 @@ import trials.TrialRun;
 
 import java.sql.Timestamp;
 import java.util.Random;
-import java.util.concurrent.TimeUnit;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class Controller {
     private boolean hovered;
-    private Timestamp timestamp;
+    private Timer timer;
+    private int breakTimeLeft;
 
     private static Controller INSTANCE;
 
@@ -44,6 +46,9 @@ public class Controller {
     private Button click_start;
 
     @FXML
+    private Button click_continue;
+
+    @FXML
     private Line hori_line;
 
     @FXML
@@ -62,8 +67,7 @@ public class Controller {
 
     @FXML
     void btnHover(MouseEvent event) {
-        //TODO: start counting time for exercise
-        //timestamp = new Timestamp(System.currentTimeMillis()); // only when new position
+        if (!hovered && !hori_line.isVisible() && !vert_line.isVisible()) Data.getInstance().setStartMilliSec(System.currentTimeMillis());
 
         hori_line.setVisible(true);
         vert_line.setVisible(true);
@@ -84,6 +88,9 @@ public class Controller {
             click_field.setVisible(true);
             click_field.setDisable(false);
 
+            hori_line.setVisible(false);
+            vert_line.setVisible(false);
+
             //setting up Trial Run
             TrialRun.getInstance();
 
@@ -101,24 +108,45 @@ public class Controller {
     }
 
 
+    @FXML
+    void btnContinueClick(MouseEvent event) {
+        click_continue.setVisible(false);
+        click_field.setVisible(true);
+        click_field.setDisable(false);
+
+        hori_line.setVisible(false);
+        vert_line.setVisible(false);
+
+        INFO.TRIAL_NR = 0;
+        INFO.BLOCK_NR++;
+        updateTextField();
+        TrialRun.getInstance().startNewBlock();
+
+        //setup next exercise
+        Trial trial = TrialRun.getInstance().getRandomTrial();
+        setExercise(trial.getRow(), trial.getCol());
+
+    }
+
+
     public void success() {
-        startNewTrial();
         if (TrialRun.getInstance().getActualTrial() != null) {
             TrialRun.getInstance().getActualTrial().setSuccessTrialsLeft(TrialRun.getInstance().getActualTrial().getSuccessTrialsLeft() - 1);
             if (TrialRun.getInstance().getActualTrial().getSuccessTrialsLeft() == 0) {
                 TrialRun.getInstance().removeTrial(TrialRun.getInstance().getActualTrial());
             }
         }
+        startNewTrial();
     }
 
     public void noSuccess() {
-        startNewTrial();
         if (TrialRun.getInstance().getActualTrial() != null) {
             TrialRun.getInstance().getActualTrial().setFailTrialsLeft(TrialRun.getInstance().getActualTrial().getFailTrialsLeft() - 1);
             if (TrialRun.getInstance().getActualTrial().getFailTrialsLeft() == 0) {
                 TrialRun.getInstance().removeTrial(TrialRun.getInstance().getActualTrial());
             }
         }
+        startNewTrial();
     }
 
     public void startNewTrial() {
@@ -126,8 +154,7 @@ public class Controller {
         if (newTrial != null) {//when null take a break and start new Block
             setExercise(newTrial.getRow(), newTrial.getCol());
         } else {
-            Platform.runLater(this::takeABrake); //TODO: make a threadsafe brake
-            //takeABrake(30);// 30 seconds break and new brake
+            this.takeABreak();
 
         }
     }
@@ -135,38 +162,36 @@ public class Controller {
     /**
      * Take a brake and start new Block if needed
      */
-    private void takeABrake() {
-        int sec = INFO.BRAKE_TIME;
+    private void takeABreak() {
+        breakTimeLeft = INFO.BREAK_TIME;
         click_field.setDisable(true);
         click_field.setVisible(false);
 
+        //TODO: handle case if all blocks are done
         if (INFO.BLOCK_NR >= INFO.BLOCK_AMOUNT) { //finish test
             lbl_info.setText("finished HCI study! Thanks for your participation");
-            try {
-                TimeUnit.SECONDS.sleep(sec);
-                lbl_info.setText(sec + " seconds brake!");
-            } catch (InterruptedException ie) {
-                ie.printStackTrace();
-            }
-            System.exit(0); //exit Program after study
 
         } else { //brake and next block
-            //sleep for @sec seconds
-            try {
-                TimeUnit.SECONDS.sleep(sec);
-                lbl_info.setText(sec + " seconds brake!");
-            } catch (InterruptedException ie) {
-                ie.printStackTrace();
-            }
-            //setup new block
-            INFO.TRIAL_NR = 0;
-            INFO.BLOCK_NR++;
-            updateTextField();
-            TrialRun.getInstance().startNewBlock();
-            click_field.setDisable(false);
-            click_field.setVisible(true);
-            Trial newTrial = TrialRun.getInstance().getRandomTrial();
-            setExercise(newTrial.getRow(), newTrial.getCol());
+            click_continue.setVisible(true);
+            click_continue.setDisable(true);
+            click_continue.setText("Continue (in " + breakTimeLeft + " seconds)");
+
+            timer = new Timer();
+            timer.scheduleAtFixedRate(new TimerTask() {
+                @Override
+                public void run() {
+                    if (breakTimeLeft > 0) {
+                        Platform.runLater(() -> click_continue.setText("Continue (in " + breakTimeLeft-- + " seconds)"));
+                    } else {
+                        //enable continue button
+                        Platform.runLater(() -> {
+                            click_continue.setText("Continue");
+                            click_continue.setDisable(false);
+                        });
+                        timer.cancel();
+                    }
+                }
+            }, 1000, 1000);
 
         }
 
@@ -209,6 +234,8 @@ public class Controller {
         INFO.TRIAL_NR++;
         INFO.TASK_ID++;
         updateTextField();
+
+        Data.getInstance().setStartMilliSec(System.currentTimeMillis());
 
     }
 

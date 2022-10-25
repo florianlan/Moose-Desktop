@@ -17,6 +17,7 @@ public class Main extends Application {
         Parent root = FXMLLoader.load(getClass().getResource("sample.fxml"));
         primaryStage.setTitle("Moose Desktop");
         primaryStage.setScene(new Scene(root, 600, 400));
+        primaryStage.setMaximized(true);
         primaryStage.show();
     }
 

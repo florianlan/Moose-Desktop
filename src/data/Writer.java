@@ -2,10 +2,8 @@ package data;
 
 import tools.TrialInfo.INFO;
 
-import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.PrintWriter;
 
 public class Writer {
     private FileWriter writer;
@@ -29,8 +27,8 @@ public class Writer {
 
     public void prepareCSV() throws IOException {
         String str = "ParticipantID,TrialNr,TaskID,BlockNr,NrRows,NrCols,IconType,LinesVisible," +
-                "SelectedRow,SelectedCol,ExpectedRow,ExpectedCol,Success,DownX,DownY,UpX,UpY," +
-                "ManhattanDistance,ManhattanOffRow,ManhattanOffCol,PixOffRow,PixOffCol,EuqlidDistance;" +
+                "SelectedRow,SelectedCol,ExpectedRow,ExpectedCol,Success,Duration,DownX,DownY,UpX,UpY," +
+                "ManhattanDistance,ManhattanOffRow,ManhattanOffCol,PixOffY,PixOffX,EuclidDistance,SizeXTotal,SizeYTotal,SizeXField,SizeYField;" +
                 "\n";
         writer.write(str);
         writer.flush();

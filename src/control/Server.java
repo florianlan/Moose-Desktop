@@ -9,10 +9,13 @@ import javafx.application.Platform;
 import tools.Consts.STRINGS;
 import tools.Logs;
 import tools.Memo;
+import tools.TrialInfo;
 
 import java.io.*;
 import java.net.*;
 import java.util.concurrent.*;
+
+import static java.lang.System.currentTimeMillis;
 
 public class Server {
     private final static String NAME = "Server/";
@@ -96,8 +99,9 @@ public class Server {
                             //first INTRO message after connecting
 
                         } else if (memo.getAction().equals(STRINGS.SCROLL) && memo.getMode().equals(STRINGS.DRAG)) {
-                            // if (Controller.getInstance().isHovered())
-                            if (true) { //TODO: implement correct in thread safe mode
+                            Data.getInstance().setEndMilliSec(System.currentTimeMillis()); //for time measurement
+
+                            if (Controller.getInstance().isHovered()) {
                                 System.out.println("click and hovered");
                                 // New click on GRID
                                 String[] down = memo.getStrValue(1).split(",");
@@ -124,6 +128,9 @@ public class Server {
                             // Init pixel size of Grid
                             Data.getInstance().setSizeX(memo.getIntValue(1));
                             Data.getInstance().setSizeY(memo.getIntValue(2));
+                        } else if (memo.getAction().equals(STRINGS.INTRO) && memo.getMode().equals(STRINGS.SYMBOLS)) {
+                            if (memo.getIntValue(1) == 0) TrialInfo.INFO.SYMBOLS = false;
+                            else TrialInfo.INFO.SYMBOLS = true;
                         }
                         System.out.println(memo);
 

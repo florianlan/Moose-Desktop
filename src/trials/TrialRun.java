@@ -33,7 +33,7 @@ public class TrialRun {
 
     /**
      * start new block after brake
-     * @return
+     * @return TrialRun
      */
     public TrialRun startNewBlock() {
         INSTANCE = new TrialRun();
@@ -47,7 +47,13 @@ public class TrialRun {
     public Trial getRandomTrial() {
         if (!trialList.isEmpty()) {
             Collections.shuffle(trialList);
-            actualTrial = trialList.get(0);
+            Trial newTrial = trialList.get(0);
+            while (trialList.size() > 1 && newTrial == actualTrial) {
+                Collections.shuffle(trialList);
+                newTrial = trialList.get(0);
+            }
+
+            actualTrial = newTrial;
         } else actualTrial = null;
         return actualTrial;
     }
@@ -59,7 +65,4 @@ public class TrialRun {
         return actualTrial;
     }
 
-    /**
-     * Setter
-     */
 }
