@@ -117,6 +117,7 @@ public class Consts {
         public final static String P_INIT = "P";
         public final static String END = "END";
         public final static String SYMBOLS = "SYMBOLS";
+        public final static String FAILS = "FAILS";
 
         public final static String DEMO_TITLE = "Welcome to the scrolling experiment!";
         public final static String DEMO_NEXT = "First, let's have a demo >";

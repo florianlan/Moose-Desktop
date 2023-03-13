@@ -26,7 +26,7 @@ public class Writer {
     }
 
     public void prepareCSV() throws IOException {
-        String str = "ParticipantID,TrialNr,TaskID,BlockNr,NrRows,NrCols,IconType,LinesVisible," +
+        String str = "ParticipantID,TrialNr,TaskID,BlockNr,NrRows,NrCols,SymbolsVisible,LinesVisible," +
                 "SelectedRow,SelectedCol,ExpectedRow,ExpectedCol,Success,Duration,DownX,DownY,UpX,UpY," +
                 "ManhattanDistance,ManhattanOffRow,ManhattanOffCol,PixOffY,PixOffX,EuclidDistance,SizeXTotal,SizeYTotal,SizeXField,SizeYField;" +
                 "\n";

@@ -15,8 +15,6 @@ import java.io.*;
 import java.net.*;
 import java.util.concurrent.*;
 
-import static java.lang.System.currentTimeMillis;
-
 public class Server {
     private final static String NAME = "Server/";
 
@@ -129,8 +127,14 @@ public class Server {
                             Data.getInstance().setSizeX(memo.getIntValue(1));
                             Data.getInstance().setSizeY(memo.getIntValue(2));
                         } else if (memo.getAction().equals(STRINGS.INTRO) && memo.getMode().equals(STRINGS.SYMBOLS)) {
-                            if (memo.getIntValue(1) == 0) TrialInfo.INFO.SYMBOLS = false;
-                            else TrialInfo.INFO.SYMBOLS = true;
+                            if (memo.getIntValue(1) == 0) TrialInfo.INFO.SHOW_SYMBOLS = false;
+                            else TrialInfo.INFO.SHOW_SYMBOLS = true;
+                            if (memo.getIntValue(2) == 0) TrialInfo.INFO.SHOW_LINES = false;
+                            else TrialInfo.INFO.SHOW_LINES = true;
+                        } else if (memo.getAction().equals(STRINGS.INTRO) && memo.getMode().equals(STRINGS.FAILS)) {
+                            //TODO: handle INTRO for FAILS
+                            if (memo.getIntValue(1) == 0) TrialInfo.INFO.SHOW_FAILS = false;
+                            else TrialInfo.INFO.SHOW_FAILS = true;
                         }
                         System.out.println(memo);
 

@@ -69,7 +69,7 @@ public class Data {
         if (actualX == expectedX && actualY == expectedY) {
             try {
                 String str = INFO.PARTICIPANT_ID + "," + INFO.TRIAL_NR + "," + INFO.TASK_ID + "," + INFO.BLOCK_NR + "," +
-                        rows + "," + cols + "," + INFO.SYMBOLS + "," + INFO.SYMBOLS + "," + actualY + "," + actualX + "," + expectedY + "," +
+                        rows + "," + cols + "," + INFO.SHOW_LINES + "," + INFO.SHOW_SYMBOLS + "," + actualY + "," + actualX + "," + expectedY + "," +
                         expectedX + "," + "true" + "," + duration + "," + downX + "," + downY + "," + upX + "," + upY + "," +
                         "0,0,0," + pixOffY + "," + pixOffX + "," + euclidDistance + "," + sizeX + "," + sizeY + "," + fieldX + "," + fieldY + "\n";
                 Writer.getInstance().write(str);
@@ -88,7 +88,7 @@ public class Data {
 
         try {
             String str = INFO.PARTICIPANT_ID + "," + INFO.TRIAL_NR + "," + INFO.TASK_ID + "," + INFO.BLOCK_NR + "," +
-                    rows + "," + cols + "," + INFO.SYMBOLS + "," + INFO.SYMBOLS + "," + actualY + "," + actualX + "," + expectedY + "," +
+                    rows + "," + cols + "," + INFO.SHOW_LINES + "," + INFO.SHOW_SYMBOLS + "," + actualY + "," + actualX + "," + expectedY + "," +
                     expectedX + "," + "false" + "," + duration + "," + downX + "," + downY + "," + upX + "," + upY + "," +
                     manhattanDistance + "," + manhattanOffRow + "," + manhattanOffCol + "," + pixOffY + "," + pixOffX + "," + euclidDistance + "," + sizeX + "," + sizeY + "," + fieldX + "," + fieldY + "\n";
             Writer.getInstance().write(str);

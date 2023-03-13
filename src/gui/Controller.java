@@ -130,6 +130,7 @@ public class Controller {
 
 
     public void success() {
+        //TODO: show green if setting is on show error
         if (TrialRun.getInstance().getActualTrial() != null) {
             TrialRun.getInstance().getActualTrial().setSuccessTrialsLeft(TrialRun.getInstance().getActualTrial().getSuccessTrialsLeft() - 1);
             if (TrialRun.getInstance().getActualTrial().getSuccessTrialsLeft() == 0) {
@@ -140,6 +141,7 @@ public class Controller {
     }
 
     public void noSuccess() {
+        //TODO: show light_red if setting is on show error
         if (TrialRun.getInstance().getActualTrial() != null) {
             TrialRun.getInstance().getActualTrial().setFailTrialsLeft(TrialRun.getInstance().getActualTrial().getFailTrialsLeft() - 1);
             if (TrialRun.getInstance().getActualTrial().getFailTrialsLeft() == 0) {
