@@ -7,13 +7,13 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Background;
 import javafx.scene.layout.Pane;
 import javafx.scene.shape.Line;
 import tools.TrialInfo.INFO;
 import trials.Trial;
 import trials.TrialRun;
 
-import java.sql.Timestamp;
 import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -130,6 +130,7 @@ public class Controller {
 
 
     public void success() {
+        showSuccess(true);
         //TODO: show green if setting is on show error
         if (TrialRun.getInstance().getActualTrial() != null) {
             TrialRun.getInstance().getActualTrial().setSuccessTrialsLeft(TrialRun.getInstance().getActualTrial().getSuccessTrialsLeft() - 1);
@@ -141,6 +142,7 @@ public class Controller {
     }
 
     public void noSuccess() {
+        showSuccess(false);
         //TODO: show light_red if setting is on show error
         if (TrialRun.getInstance().getActualTrial() != null) {
             TrialRun.getInstance().getActualTrial().setFailTrialsLeft(TrialRun.getInstance().getActualTrial().getFailTrialsLeft() - 1);
@@ -151,13 +153,15 @@ public class Controller {
         startNewTrial();
     }
 
+    /**
+     * start a new trial
+     */
     public void startNewTrial() {
         Trial newTrial = TrialRun.getInstance().getRandomTrial();
         if (newTrial != null) {//when null take a break and start new Block
             setExercise(newTrial.getRow(), newTrial.getCol());
         } else {
             this.takeABreak();
-
         }
     }
 
@@ -196,6 +200,29 @@ public class Controller {
             }, 1000, 1000);
 
         }
+
+    }
+
+    /**
+     * show if success
+     * @param success
+     */
+    private void showSuccess(boolean success) {
+        if (!INFO.SHOW_FAILS) return;
+        if (success) {
+            this.click_field.setStyle("-fx-background-color: #91ea50; -fx-border-color: #000000");
+        } else {
+            this.click_field.setStyle("-fx-background-color: #e55d5d; -fx-border-color: #000000");
+        }
+
+        new java.util.Timer().schedule(
+            new java.util.TimerTask() {
+                @Override
+                public void run() {
+                    click_field.setStyle("-fx-background-color: #cccccc; -fx-border-color: #000000");
+                }
+            }, 500
+        );
 
     }
 

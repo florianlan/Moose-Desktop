@@ -69,7 +69,7 @@ public class Data {
         if (actualX == expectedX && actualY == expectedY) {
             try {
                 String str = INFO.PARTICIPANT_ID + "," + INFO.TRIAL_NR + "," + INFO.TASK_ID + "," + INFO.BLOCK_NR + "," +
-                        rows + "," + cols + "," + INFO.SHOW_LINES + "," + INFO.SHOW_SYMBOLS + "," + actualY + "," + actualX + "," + expectedY + "," +
+                        rows + "," + cols + "," + INFO.SHOW_SYMBOLS + "," + INFO.SHOW_LINES + "," + actualY + "," + actualX + "," + expectedY + "," +
                         expectedX + "," + "true" + "," + duration + "," + downX + "," + downY + "," + upX + "," + upY + "," +
                         "0,0,0," + pixOffY + "," + pixOffX + "," + euclidDistance + "," + sizeX + "," + sizeY + "," + fieldX + "," + fieldY + "\n";
                 Writer.getInstance().write(str);
@@ -84,7 +84,7 @@ public class Data {
 
         int manhattanOffRow = Math.abs(actualY - expectedY);
         int manhattanOffCol = Math.abs(actualX - expectedX);
-        int manhattanDistance = manhattanOffCol + manhattanOffCol;
+        int manhattanDistance = manhattanOffCol + manhattanOffRow;
 
         try {
             String str = INFO.PARTICIPANT_ID + "," + INFO.TRIAL_NR + "," + INFO.TASK_ID + "," + INFO.BLOCK_NR + "," +
