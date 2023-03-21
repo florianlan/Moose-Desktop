@@ -109,6 +109,9 @@ public class Server {
                                 Data.getInstance().setUpX(Integer.parseInt(up[0]));
                                 Data.getInstance().setUpY(Integer.parseInt(up[1]));
 
+                                //ignore rare case that a negative value is passed
+                                if (Data.getInstance().getUpX() <= 0 || Data.getInstance().getUpY() <= 0) break;
+
                                 // If moose click on square
                                 Controller ctr = Controller.getInstance();
                                 if (Data.getInstance().checkMooseClick()) {
