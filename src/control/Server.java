@@ -96,7 +96,7 @@ public class Server {
                         if (memo.getAction().equals(STRINGS.INTRO) && memo.getMode().equals(STRINGS.INTRO)) {
                             //first INTRO message after connecting
 
-                        } else if (memo.getAction().equals(STRINGS.SCROLL) && memo.getMode().equals(STRINGS.DRAG)) {
+                        } else if (memo.getAction().equals(STRINGS.EVENT) && memo.getMode().equals(STRINGS.TAP)) {
                             Data.getInstance().setEndMilliSec(System.currentTimeMillis()); //for time measurement
 
                             if (Controller.getInstance().isHovered()) {
@@ -130,14 +130,19 @@ public class Server {
                             Data.getInstance().setSizeX(memo.getIntValue(1));
                             Data.getInstance().setSizeY(memo.getIntValue(2));
                         } else if (memo.getAction().equals(STRINGS.INTRO) && memo.getMode().equals(STRINGS.SYMBOLS)) {
-                            if (memo.getIntValue(1) == 0) TrialInfo.INFO.SHOW_SYMBOLS = false;
-                            else TrialInfo.INFO.SHOW_SYMBOLS = true;
-                            if (memo.getIntValue(2) == 0) TrialInfo.INFO.SHOW_LINES = false;
-                            else TrialInfo.INFO.SHOW_LINES = true;
+                            // Init symbols and lines visible?
+                            TrialInfo.INFO.SHOW_SYMBOLS = memo.getIntValue(1) != 0;
+                            TrialInfo.INFO.SHOW_LINES = memo.getIntValue(2) != 0;
                         } else if (memo.getAction().equals(STRINGS.INTRO) && memo.getMode().equals(STRINGS.FAILS)) {
-                            //TODO: handle INTRO for FAILS
-                            if (memo.getIntValue(1) == 0) TrialInfo.INFO.SHOW_FAILS = false;
-                            else TrialInfo.INFO.SHOW_FAILS = true;
+                            // Init show fails?
+                            TrialInfo.INFO.SHOW_FAILS = memo.getIntValue(1) != 0;
+                        } else if (memo.getAction().equals(STRINGS.INTRO) && memo.getMode().equals(STRINGS.TEST_ID)) {
+                            // Init Test_id (active rows)
+                            TrialInfo.INFO.TEST_ID = String.valueOf(memo.getIntValue(1));
+                        } else if (memo.getAction().equals(STRINGS.INTRO) && memo.getMode().equals(STRINGS.ROWS_ACTIVE)) {
+                            // Init set active rows
+                            TrialInfo.INFO.ACTIVE_ROW_1 = memo.getIntValue(1);
+                            TrialInfo.INFO.ACTIVE_ROW_2 = memo.getIntValue(2);
                         }
                         System.out.println(memo);
 
