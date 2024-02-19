@@ -1,19 +1,20 @@
 package gui;
 
 import data.Data;
+import data.Writer;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.Background;
 import javafx.scene.layout.Pane;
 import javafx.scene.shape.Line;
 import tools.TrialInfo.INFO;
 import trials.Trial;
 import trials.TrialRun;
 
+import java.io.IOException;
 import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -77,19 +78,25 @@ public class Controller {
 
     @FXML
     void btnHoverExit(MouseEvent event) {
-        hovered = false;
+//        hovered = false;
     }
 
 
     @FXML
     void btnStartClick(MouseEvent event) {
         if (Data.getInstance().getRows() > 0) { //da verbindung hergestellt zu smartphone
+            try {
+                Writer.writeConfigCSV();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
             click_start.setVisible(false);
             click_field.setVisible(true);
             click_field.setDisable(false);
 
             hori_line.setVisible(false);
             vert_line.setVisible(false);
+            hovered = false;
 
             //setting up Trial Run
             TrialRun.getInstance();
@@ -116,6 +123,7 @@ public class Controller {
 
         hori_line.setVisible(false);
         vert_line.setVisible(false);
+        hovered = false;
 
         INFO.TRIAL_NR = 0;
         INFO.BLOCK_NR++;
@@ -128,26 +136,19 @@ public class Controller {
 
     }
 
+    /**
+     * after checking success wrap up
+     * @param success (0-3)
+     */
+    public void onCheck(int success) {
+        showSuccess(success);
+        Trial trial = TrialRun.getInstance().getActualTrial();
+        TrialRun trialRun = TrialRun.getInstance();
 
-    public void success() {
-        showSuccess(true);
-        //TODO: show green if setting is on show error
-        if (TrialRun.getInstance().getActualTrial() != null) {
-            TrialRun.getInstance().getActualTrial().setSuccessTrialsLeft(TrialRun.getInstance().getActualTrial().getSuccessTrialsLeft() - 1);
-            if (TrialRun.getInstance().getActualTrial().getSuccessTrialsLeft() == 0) {
-                TrialRun.getInstance().removeTrial(TrialRun.getInstance().getActualTrial());
-            }
-        }
-        startNewTrial();
-    }
-
-    public void noSuccess() {
-        showSuccess(false);
-        //TODO: show light_red if setting is on show error
-        if (TrialRun.getInstance().getActualTrial() != null) {
-            TrialRun.getInstance().getActualTrial().setFailTrialsLeft(TrialRun.getInstance().getActualTrial().getFailTrialsLeft() - 1);
-            if (TrialRun.getInstance().getActualTrial().getFailTrialsLeft() == 0) {
-                TrialRun.getInstance().removeTrial(TrialRun.getInstance().getActualTrial());
+        if (trial != null) {
+            int trialsLeft = trialRun.getActualTrial().decTrialsLeft(1);
+            if (trialsLeft == 0) {
+                trialRun.removeTrial(trialRun.getActualTrial());
             }
         }
         startNewTrial();
@@ -173,7 +174,6 @@ public class Controller {
         click_field.setDisable(true);
         click_field.setVisible(false);
 
-        //TODO: handle case if all blocks are done
         if (INFO.BLOCK_NR >= INFO.BLOCK_AMOUNT) { //finish test
             lbl_info.setText("finished HCI study! Thanks for your participation");
 
@@ -205,14 +205,15 @@ public class Controller {
 
     /**
      * show if success
-     * @param success
+     * @param success (0 = closer wrong row; 1 = closer right row; 2 = right row; 3 = in (x)mm circle)
      */
-    private void showSuccess(boolean success) {
+    private void showSuccess(int success) {
         if (!INFO.SHOW_FAILS) return;
-        if (success) {
-            this.click_field.setStyle("-fx-background-color: #91ea50; -fx-border-color: #000000");
-        } else {
-            this.click_field.setStyle("-fx-background-color: #e55d5d; -fx-border-color: #000000");
+        switch (success) {
+            case 0 -> this.click_field.setStyle("-fx-background-color: #e55d5d; -fx-border-color: #000000");
+            case 1 -> this.click_field.setStyle("-fx-background-color: #eaa050; -fx-border-color: #000000");
+            case 2 -> this.click_field.setStyle("-fx-background-color: #eae750; -fx-border-color: #000000");
+            case 3 -> this.click_field.setStyle("-fx-background-color: #91ea50; -fx-border-color: #000000");
         }
 
         new java.util.Timer().schedule(
@@ -250,8 +251,14 @@ public class Controller {
         }
 
         //new symbol
-        hori_line.setStartY((row - 1) * offsetY);
-        hori_line.setEndY((row - 1) * offsetY);
+        if (row == INFO.ACTIVE_ROW_1) {
+            hori_line.setStartY(0);
+            hori_line.setEndY(0);
+        } else if (row == INFO.ACTIVE_ROW_2) {
+            hori_line.setStartY(lineLength);
+            hori_line.setEndY(lineLength);
+        }
+
         vert_line.setStartX((col - 1) * offsetX);
         vert_line.setEndX((col - 1) * offsetX);
 
@@ -261,7 +268,7 @@ public class Controller {
 
         //update Trial Label
         INFO.TRIAL_NR++;
-        INFO.TASK_ID++;
+        INFO.TRIAL_ID = row + "" + col;
         updateTextField();
 
         Data.getInstance().setStartMilliSec(System.currentTimeMillis());

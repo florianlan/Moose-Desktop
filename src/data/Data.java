@@ -1,5 +1,6 @@
 package data;
 
+import tools.TrialInfo;
 import tools.TrialInfo.INFO;
 
 import java.io.IOException;
@@ -41,10 +42,10 @@ public class Data {
 
     }
 
-    public boolean checkMooseClick() {
+    public int checkMooseClick() {
         if (expectedX == 0 || expectedY == 0) {
             System.out.println("no valid expect");
-            return false;
+            return 0;
         }
 
         //field size per grid element
@@ -62,43 +63,49 @@ public class Data {
         int pixOffY = upY - expectedYPixel;
         double euclidDistance = Math.sqrt(Math.pow(pixOffY, 2) + Math.pow(pixOffX, 2));
 
-        //duration from hover to click
-        int duration = (int) (endMilliSec - startMilliSec);
+        //trialTime from hover to click
+        int trialTime = (int) (endMilliSec - startMilliSec);
 
-        // Writing result into CSV file
-        if (actualX == expectedX && actualY == expectedY) {
-            try {
-                String str = INFO.PARTICIPANT_ID + "," + INFO.TRIAL_NR + "," + INFO.TASK_ID + "," + INFO.BLOCK_NR + "," +
-                        rows + "," + cols + "," + INFO.SHOW_SYMBOLS + "," + INFO.SHOW_LINES + "," + actualY + "," + actualX + "," + expectedY + "," +
-                        expectedX + "," + "true" + "," + duration + "," + downX + "," + downY + "," + upX + "," + upY + "," +
-                        "0,0,0," + pixOffY + "," + pixOffX + "," + euclidDistance + "," + sizeX + "," + sizeY + "," + fieldX + "," + fieldY + "\n";
-                Writer.getInstance().write(str);
-                Writer.getInstance().flush();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
-            System.out.println("click success");
-            return true;
-        }
-
+        //manhattan calculations
         int manhattanOffRow = Math.abs(actualY - expectedY);
         int manhattanOffCol = Math.abs(actualX - expectedX);
         int manhattanDistance = manhattanOffCol + manhattanOffRow;
 
+        // 3 => in DOT_SIZE_PX circle
+        // 2 => outside circle, but closer then to other circle
+        // 1 => outside row, but closer to right row
+        // 0 => outside row and closer to wrong row
+        int successType = -1;
+
+        if (actualX == expectedX && actualY == expectedY) {
+            successType = euclidDistance < INFO.DOT_SIZE_PX ? 3 : 2;
+        } else {
+            int wrongYPixel;
+            if (expectedY == INFO.ACTIVE_ROW_1) {
+                wrongYPixel = (int) (INFO.ACTIVE_ROW_2 * fieldY - fieldY/2);
+            } else {
+                wrongYPixel = (int) (INFO.ACTIVE_ROW_1 * fieldY - fieldY/2);
+            }
+            int halfDistanceActiveRows = Math.abs(wrongYPixel - expectedYPixel) / 2;
+            System.out.println(wrongYPixel + "," + expectedYPixel + "," + halfDistanceActiveRows);
+            successType = Math.abs(pixOffY) < halfDistanceActiveRows ? 1 : 0;
+        }
+
+        // Writing result into CSV file
         try {
-            String str = INFO.PARTICIPANT_ID + "," + INFO.TRIAL_NR + "," + INFO.TASK_ID + "," + INFO.BLOCK_NR + "," +
-                    rows + "," + cols + "," + INFO.SHOW_LINES + "," + INFO.SHOW_SYMBOLS + "," + actualY + "," + actualX + "," + expectedY + "," +
-                    expectedX + "," + "false" + "," + duration + "," + downX + "," + downY + "," + upX + "," + upY + "," +
-                    manhattanDistance + "," + manhattanOffRow + "," + manhattanOffCol + "," + pixOffY + "," + pixOffX + "," + euclidDistance + "," + sizeX + "," + sizeY + "," + fieldX + "," + fieldY + "\n";
+            String str = INFO.PARTICIPANT_ID + "," + INFO.TRIAL_NR + "," + INFO.TRIAL_ID + "," + INFO.BLOCK_NR + "," +
+                    actualY + "," + actualX + "," + expectedY + "," + expectedX + "," + successType + "," + trialTime +
+                    "," + downX + "," + downY + "," + upX + "," + upY + "," + manhattanDistance + "," +
+                    manhattanOffRow + "," + manhattanOffCol + ',' + pixOffY + "," + pixOffX + "," + euclidDistance + "\n";
+
             Writer.getInstance().write(str);
             Writer.getInstance().flush();
         } catch (IOException e) {
             e.printStackTrace();
         }
 
-        System.out.println("no success");
-        return false;
+        System.out.println("success " + successType);
+        return successType;
     }
 
 

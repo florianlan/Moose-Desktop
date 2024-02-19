@@ -1,6 +1,7 @@
 package trials;
 
 import data.Data;
+import tools.TrialInfo.INFO;
 
 import java.util.*;
 
@@ -14,10 +15,9 @@ public class TrialRun {
      */
     private TrialRun() {
         trialList = new ArrayList<>();
-        for (int i = 1; i <= Data.getInstance().getRows(); i++) {
-            for (int j = 1; j <= Data.getInstance().getCols(); j++) {
-                trialList.add(new Trial(i, j));
-            }
+        for (int i = 1; i <= Data.getInstance().getCols(); i++) {
+            trialList.add(new Trial(INFO.ACTIVE_ROW_1, i));
+            trialList.add(new Trial(INFO.ACTIVE_ROW_2, i));
         }
     }
 
@@ -33,6 +33,7 @@ public class TrialRun {
 
     /**
      * start new block after brake
+     *
      * @return TrialRun
      */
     public TrialRun startNewBlock() {

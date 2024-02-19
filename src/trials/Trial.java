@@ -5,8 +5,7 @@ import tools.TrialInfo.INFO;
 public class Trial {
     private int row;
     private int col;
-    private int successTrialsLeft;
-    private int failTrialsLeft;
+    private int trialsLeft;
 
     /**
      * Constructor
@@ -14,20 +13,16 @@ public class Trial {
     public Trial(int row, int col) {
         this.row = row;
         this.col = col;
-        this.successTrialsLeft = INFO.TRIAL_AMOUNT_PER_BLOCK;
-        this.failTrialsLeft = INFO.MAX_TRIAL_FAILURE;
+        this.trialsLeft = INFO.TRIAL_AMOUNT_PER_BLOCK;
     }
 
     /**
-     * Setter
+     * Decrement trails left by amount
+     * @param amount amount to decrement
+     * @return amount trials left
      */
-
-    public void setFailTrialsLeft(int failTrialsLeft) {
-        this.failTrialsLeft = failTrialsLeft;
-    }
-
-    public void setSuccessTrialsLeft(int successTrialsLeft) {
-        this.successTrialsLeft = successTrialsLeft;
+    public int decTrialsLeft(int amount) {
+        return this.trialsLeft -= amount;
     }
 
     /**
@@ -41,11 +36,7 @@ public class Trial {
         return col;
     }
 
-    public int getFailTrialsLeft() {
-        return failTrialsLeft;
-    }
-
-    public int getSuccessTrialsLeft() {
-        return successTrialsLeft;
+    public int getTrialsLeft() {
+        return trialsLeft;
     }
 }
