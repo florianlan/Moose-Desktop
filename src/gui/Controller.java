@@ -78,7 +78,6 @@ public class Controller {
 
     @FXML
     void btnHoverExit(MouseEvent event) {
-//        hovered = false;
     }
 
 
