@@ -20,8 +20,10 @@ public class Data {
     private int expectedY;
 
     //for time measurement
+    private long trailActiveMilliSec;
     private long startMilliSec;
     private long endMilliSec;
+    private long clickDuration;
 
     private static Data INSTANCE;
 
@@ -94,7 +96,8 @@ public class Data {
         // Writing result into CSV file
         try {
             String str = INFO.PARTICIPANT_ID + "," + INFO.TRIAL_NR + "," + INFO.TRIAL_ID + "," + INFO.BLOCK_NR + "," +
-                    actualY + "," + actualX + "," + expectedY + "," + expectedX + "," + successType + "," + trialTime +
+                    actualY + "," + actualX + "," + expectedY + "," + expectedX + "," + successType + "," +
+                    trailActiveMilliSec + "," + startMilliSec + "," + endMilliSec + "," + trialTime + "," + clickDuration +
                     "," + downX + "," + downY + "," + upX + "," + upY + "," + manhattanDistance + "," +
                     manhattanOffRow + "," + manhattanOffCol + ',' + pixOffY + "," + pixOffX + "," + euclidDistance + "\n";
 
@@ -160,6 +163,14 @@ public class Data {
         this.endMilliSec = endMilliSec;
     }
 
+    public void setTrailActiveMilliSec(long trailActiveMilliSec) {
+        this.trailActiveMilliSec = trailActiveMilliSec;
+    }
+
+    public void setClickDuration(long clickDuration) {
+        this.clickDuration = clickDuration;
+    }
+
     /**
      * Getter
      */
@@ -201,5 +212,13 @@ public class Data {
 
     public long getEndMilliSec() {
         return endMilliSec;
+    }
+
+    public long getTrailActiveMilliSec() {
+        return trailActiveMilliSec;
+    }
+
+    public long getClickDuration() {
+        return trailActiveMilliSec;
     }
 }

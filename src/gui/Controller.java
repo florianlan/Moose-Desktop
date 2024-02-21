@@ -68,7 +68,7 @@ public class Controller {
 
     @FXML
     void btnHover(MouseEvent event) {
-        if (!hovered && !hori_line.isVisible() && !vert_line.isVisible()) Data.getInstance().setStartMilliSec(System.currentTimeMillis());
+        if (!hori_line.isVisible() && !vert_line.isVisible()) Data.getInstance().setStartMilliSec(System.currentTimeMillis());
 
         hori_line.setVisible(true);
         vert_line.setVisible(true);

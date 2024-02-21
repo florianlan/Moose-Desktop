@@ -56,6 +56,8 @@ public class TrialRun {
 
             actualTrial = newTrial;
         } else actualTrial = null;
+
+        Data.getInstance().setTrailActiveMilliSec(System.currentTimeMillis());
         return actualTrial;
     }
 

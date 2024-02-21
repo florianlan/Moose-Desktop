@@ -32,7 +32,7 @@ public class Writer {
 
     public void prepareCSV() throws IOException {
         String str = "ParticipantID,TrialNr,TrialID,BlockNr,SelectedRow,SelectedCol,ExpectedRow,ExpectedCol," +
-                "SuccessType,TrialTime,DownX,DownY,UpX,UpY,ManhattanDistance,ManhattanOffRow,ManhattanOffCol," +
+                "SuccessType,TrialActiveTimeMs,StartTimeMs,EndTimeMs,TrialTime,ClickDuration,DownX,DownY,UpX,UpY,ManhattanDistance,ManhattanOffRow,ManhattanOffCol," +
                 "PixOffY,PixOffX,EuclidDistance;\n";
         writer.write(str);
         writer.flush();
@@ -46,17 +46,17 @@ public class Writer {
         FileWriter configWriter = new FileWriter(path);
 
         //TODO: check how to do it with existing file or not
-        if (!file.exists()) {
+//        if (!file.exists()) {
             String str = "ParticipantID,TestID,BlockAmount,TrialAmountPerBlock,ActiveRow1,ActiveRow2," +
                     "DotSizePx,BreakTime,ShowSymbols,ShowLines,ShowFails,NrRows,NrCols,SizeXTotal,SizeYTotal," +
                     "SizeXField,SizeYField;\n";
             configWriter.write(str);
             configWriter.flush();
 
-            System.out.println("File created successfully.");
-        }
+//            System.out.println("File created successfully.");
+//        }
 
-        String str = INFO.PARTICIPANT_ID + "," + INFO.TEST_ID + "," + INFO.BLOCK_AMOUNT + "," +
+        str = INFO.PARTICIPANT_ID + "," + INFO.TEST_ID + "," + INFO.BLOCK_AMOUNT + "," +
                 INFO.TRIAL_AMOUNT_PER_BLOCK + "," + INFO.ACTIVE_ROW_1 + "," + INFO.ACTIVE_ROW_2 + "," +
                 INFO.DOT_SIZE_PX + "," + INFO.BREAK_TIME + "," + INFO.SHOW_SYMBOLS + "," + INFO.SHOW_LINES + "," +
                 INFO.SHOW_FAILS + "," + INFO.NR_ROWS + "," + INFO.NR_COLS + "," + INFO.SIZE_X_TOTAL + "," +

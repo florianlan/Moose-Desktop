@@ -102,12 +102,12 @@ public class Server {
                             if (Controller.getInstance().isHovered()) {
                                 System.out.println("click and hovered");
                                 // New click on GRID
-                                String[] down = memo.getStrValue(1).split(",");
-                                String[] up = memo.getStrValue(2).split(",");
-                                Data.getInstance().setDownX(Integer.parseInt(down[0]));
-                                Data.getInstance().setDownY(Integer.parseInt(down[1]));
-                                Data.getInstance().setUpX(Integer.parseInt(up[0]));
-                                Data.getInstance().setUpY(Integer.parseInt(up[1]));
+                                String[] click = memo.getStrValue(1).split(",");
+                                Data.getInstance().setDownX(Integer.parseInt(click[0]));
+                                Data.getInstance().setDownY(Integer.parseInt(click[1]));
+                                Data.getInstance().setUpX(Integer.parseInt(click[2]));
+                                Data.getInstance().setUpY(Integer.parseInt(click[3]));
+                                Data.getInstance().setClickDuration(memo.getIntValue(2));
 
                                 //ignore rare case that a negative value is passed
                                 if (Data.getInstance().getUpX() <= 0 || Data.getInstance().getUpY() <= 0) break;
