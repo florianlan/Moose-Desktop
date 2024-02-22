@@ -1,6 +1,5 @@
 package data;
 
-import tools.TrialInfo;
 import tools.TrialInfo.INFO;
 
 import java.io.IOException;
@@ -47,7 +46,7 @@ public class Data {
     public int checkMooseClick() {
         if (expectedX == 0 || expectedY == 0) {
             System.out.println("no valid expect");
-            return 0;
+            return -10;
         }
 
         //field size per grid element
@@ -91,6 +90,16 @@ public class Data {
             int halfDistanceActiveRows = Math.abs(wrongYPixel - expectedYPixel) / 2;
             System.out.println(wrongYPixel + "," + expectedYPixel + "," + halfDistanceActiveRows);
             successType = Math.abs(pixOffY) < halfDistanceActiveRows ? 1 : 0;
+        }
+
+        // click duration too long
+        if (clickDuration > INFO.MAX_CLICK_DURATION) {
+            successType = -1;
+        }
+        // moved to much
+        int tolerance = 2 * INFO.MM_TO_PX;
+        if ((upX > downX + tolerance) || (upX < downX - tolerance) || (upY > downY + tolerance) || (upY < downY - tolerance)) {
+            successType = -2;
         }
 
         // Writing result into CSV file

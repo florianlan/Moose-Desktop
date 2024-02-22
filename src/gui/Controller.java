@@ -50,6 +50,9 @@ public class Controller {
     private Button click_continue;
 
     @FXML
+    private Button click_error;
+
+    @FXML
     private Line hori_line;
 
     @FXML
@@ -135,11 +138,31 @@ public class Controller {
 
     }
 
+    @FXML
+    void btnErrorClick(MouseEvent event) {
+        click_error.setVisible(false);
+        click_field.setVisible(true);
+    }
+
     /**
      * after checking success wrap up
      * @param success (0-3)
      */
     public void onCheck(int success) {
+        if (success == -10) return;
+        // ClickDuration too long
+        if (success == -1) {
+            click_error.setText("You had your finger too long on the screen");
+            click_error.setVisible(true);
+            click_field.setVisible(false);
+        }
+        // Too much movement
+        if (success == -2) {
+            click_error.setText("You moved your finger to much on the screen");
+            click_error.setVisible(true);
+            click_field.setVisible(false);
+        }
+
         showSuccess(success);
         Trial trial = TrialRun.getInstance().getActualTrial();
         TrialRun trialRun = TrialRun.getInstance();

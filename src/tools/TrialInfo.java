@@ -25,6 +25,8 @@ public class TrialInfo {
         public static int NR_COLS = 0;
         public static int SIZE_X_TOTAL = 0;
         public static int SIZE_Y_TOTAL = 0;
+        public static int MAX_CLICK_DURATION = 200;
+        public static int MM_TO_PX = 10;
 
     }
 }
