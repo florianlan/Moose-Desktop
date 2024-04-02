@@ -298,7 +298,7 @@ public class Controller {
     }
 
     private void updateTextField() {
-        int trails = Data.getInstance().getRows() * Data.getInstance().getCols() * INFO.TRIAL_AMOUNT_PER_BLOCK;
+        int trails = 2 * Data.getInstance().getCols() * INFO.TRIAL_AMOUNT_PER_BLOCK;
         lbl_info.setText("Block: " + INFO.BLOCK_NR + "/" + INFO.BLOCK_AMOUNT + "; Trail: " + INFO.TRIAL_NR + "/" + trails);
 
     }
